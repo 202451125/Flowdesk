@@ -6,12 +6,17 @@ app = Flask(__name__)
 CORS(app)
 
 
+# ------------------------------
+# Home route
+# ------------------------------
 @app.route("/")
 def home():
     return "FlowDesk API Running"
 
 
-# REGISTER USER
+# ------------------------------
+# Register User
+# ------------------------------
 @app.route("/register", methods=["POST"])
 def register():
     data = request.json
@@ -19,18 +24,17 @@ def register():
     name = data.get("name")
     email = data.get("email")
     password = data.get("password")
-    role = data.get("role")
 
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
 
         query = """
-        INSERT INTO users (name, email, password, role)
-        VALUES (%s, %s, %s, %s)
+        INSERT INTO users (name, email, password)
+        VALUES (%s, %s, %s)
         """
 
-        cursor.execute(query, (name, email, password, role))
+        cursor.execute(query, (name, email, password))
         conn.commit()
 
         cursor.close()
@@ -39,10 +43,13 @@ def register():
         return jsonify({"message": "User registered successfully"}), 201
 
     except Exception as e:
+        print("REGISTER ERROR:", e)
         return jsonify({"error": str(e)}), 400
 
 
-# LOGIN USER
+# ------------------------------
+# Login User
+# ------------------------------
 @app.route("/login", methods=["POST"])
 def login():
     data = request.json
@@ -67,16 +74,19 @@ def login():
                 "message": "Login successful",
                 "user": {
                     "id": user["id"],
-                    "name": user["name"],
-                    "role": user["role"]
+                    "name": user["name"]
                 }
             }), 200
         else:
             return jsonify({"error": "Invalid email or password"}), 401
 
     except Exception as e:
+        print("LOGIN ERROR:", e)
         return jsonify({"error": str(e)}), 400
 
 
+# ------------------------------
+# Run Server
+# ------------------------------
 if __name__ == "__main__":
     app.run(debug=True)

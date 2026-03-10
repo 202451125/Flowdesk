@@ -2,7 +2,7 @@ import mysql.connector
 
 def get_db_connection():
     connection = mysql.connector.connect(
-        host="127.0.0.1",   # IMPORTANT (not localhost)
+        host="localhost",
         user="root",
         password="dbmslab",
         database="flowdesk",
