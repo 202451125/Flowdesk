@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { TextField, Button, Typography, Box } from "@mui/material";
+import { Link } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -111,6 +112,9 @@ function Login() {
             >
               Login
             </Button>
+            <Typography textAlign="center" mt={2}>
+  Don't have an account? <Link to="/register">Sign Up</Link>
+</Typography>
           </form>
 
           <Typography color="error" mt={2} textAlign="center">
