@@ -13,6 +13,10 @@ import PieChartRoundedIcon from "@mui/icons-material/PieChartRounded";
 import TimelineRoundedIcon from "@mui/icons-material/TimelineRounded";
 import ArrowUpwardRoundedIcon from "@mui/icons-material/ArrowUpwardRounded";
 
+export default function Reports() {
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const [stats, setStats] = useState({ employees: 0, tasks: 0, projects: 0, completed: 0 });
 const WEEKLY_TASKS = [
   { day: "Mon", completed: 4, added: 6 },
   { day: "Tue", completed: 7, added: 5 },
@@ -220,4 +224,4 @@ export default function Reports() {
       </Box>
     </Box>
   );
-}
+}}
