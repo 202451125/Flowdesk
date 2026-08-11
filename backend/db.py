@@ -1,21 +1,22 @@
+import os
+from pathlib import Path
 import mysql.connector
 from mysql.connector import pooling
 from dotenv import load_dotenv
-import os
 
-load_dotenv()
+# Force load .env from the exact directory where db.py lives
+env_path = Path(__file__).resolve().parent / ".env"
+load_dotenv(dotenv_path=env_path)
 
 DB_CONFIG = {
     "host": os.getenv("DB_HOST", "localhost"),
     "port": int(os.getenv("DB_PORT", "3306")),
     "user": os.getenv("DB_USER", "root"),
-    "password": os.getenv("DB_PASSWORD", "your_password"),
+    "password": os.getenv("DB_PASSWORD", "dbmslab"),
     "database": os.getenv("DB_NAME", "company_management_system"),
-    "auth_plugin": "mysql_native_password",
 }
 
 DB_POOL_SIZE = int(os.getenv("DB_POOL_SIZE", "20"))
-
 
 try:
     connection_pool = pooling.MySQLConnectionPool(
@@ -24,6 +25,7 @@ try:
         pool_reset_session=True,
         **DB_CONFIG,
     )
+    print("[DB Pool Success] Connected to MySQL successfully!")
 except mysql.connector.Error as err:
     connection_pool = None
     print(f"[DB Pool Init Error] {err}")
@@ -45,4 +47,3 @@ def get_db_connection():
             raise RuntimeError(
                 f"Failed to get DB connection: {err}; direct connect also failed: {direct_err}"
             ) from direct_err
-    
